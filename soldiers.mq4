@@ -44,9 +44,15 @@ void OnDeinit(const int reason)
 //+------------------------------------------------------------------+
 void OnTick(){
 
-   
+   setPendingOrder();
+   //Sleep(500);
       
 }  
+
+
+/////////////////
+//****************
+//////////////////
 
 void setOrder(double price){
    int op;
@@ -62,3 +68,48 @@ void setOrder(double price){
       OrderSend(currency,OP_BUYLIMIT,0.01,price,10,price-stopLoss,0,NULL,magicNumber);
       }
    } 
+   
+ void setPendingOrder(){
+   //search nearest price
+   int order_a, order_b;
+   double order_price_a;
+   order_a = -1;
+   order_b = -1;
+   
+   int i=OrdersTotal()-1;
+   while(i>=0){
+      OrderSelect(i,SELECT_BY_POS);
+      //check how far is Bid from OrderPrice and 
+      //search for the nearest one.
+      if(MathAbs(OrderOpenPrice()-Bid)<(stopLoss/2)){
+         if(order_a==-1){
+            order_a = OrderType();
+            order_price_a = OrderOpenPrice();
+         }else{
+            if(order_b==-1){
+               order_b = OrderType();
+               i=-1; //exit
+            }
+         }
+   
+      }
+      
+      i--;
+      }
+      
+    //set pending orders  
+    if(order_b==-1){
+      if(order_a==OP_BUY && Bid<order_price_a)
+         OrderSend(currency,OP_SELLLIMIT,0.01,order_price_a,10,order_price_a+stopLoss,0,NULL,magicNumber);
+      if(order_a==OP_SELL && Bid<order_price_a)
+         OrderSend(currency,OP_BUYSTOP,0.01,order_price_a,10,order_price_a-stopLoss,0,NULL,magicNumber);
+      if(order_a==OP_BUY && Bid>order_price_a)
+         OrderSend(currency,OP_SELLSTOP,0.01,order_price_a,10,order_price_a+stopLoss,0,NULL,magicNumber);
+      if(order_a==OP_SELL && Bid>order_price_a)
+         OrderSend(currency,OP_BUYLIMIT,0.01,order_price_a,10,order_price_a-stopLoss,0,NULL,magicNumber);
+         
+      
+      }
+ 
+   }
+   
