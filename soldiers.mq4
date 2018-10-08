@@ -12,11 +12,11 @@
 //#include "soldiers.mqh"
 
 string currency = "USDJPY";
-double topPrice = 120;
-double downPrice = 108;
+double topPrice = 112.6;
+double downPrice = 110.6;
 double dblPrice;
 int magicNumber = 1510;
-double stopLoss = 400*Point;
+double stopLoss = 500*Point;
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
@@ -25,7 +25,7 @@ int OnInit()
    dblPrice = topPrice;
    while(dblPrice>=downPrice){
       setOrder(dblPrice);
-      dblPrice -= 0.4;
+      dblPrice -= 0.5;
       
       }
 
@@ -44,7 +44,7 @@ void OnDeinit(const int reason)
 //+------------------------------------------------------------------+
 void OnTick(){
 
-   setPendingOrder();
+   //setPendingOrder();
    //Sleep(500);
       
 }  
