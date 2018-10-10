@@ -12,8 +12,8 @@
 //#include "soldiers.mqh"
 
 string currency = "USDJPY";
-double topPrice = 112.6;
-double downPrice = 110.6;
+double topPrice = 111.85;
+double downPrice = 109.85;
 double dblPrice;
 int magicNumber = 1510;
 double stopLoss = 500*Point;
