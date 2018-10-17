@@ -11,11 +11,12 @@
 #property strict
 //#include "soldiers.mqh"
 
-string currency = "USDJPY";
+//currency = "USDJPY";
+string currency = Symbol();
 double topPrice = 111.85;
 double downPrice = 109.85;
 double dblPrice;
-int magicNumber = 1510;
+int magicNumber = 1710;
 double stopLoss = 500*Point;
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
