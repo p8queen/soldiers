@@ -48,9 +48,9 @@ void OnDeinit(const int reason)
 //+------------------------------------------------------------------+
 void OnTick(){
 
-   //setPendingOrder();
-   //Sleep(500);
-      
+   setPendingOrder();
+   Sleep(500);
+   closeAfterWalkXtips(150);   
 }  
 
 
@@ -96,7 +96,7 @@ void setOrder(double price){
       OrderSelect(i,SELECT_BY_POS);
       //check how far is Bid from OrderPrice and 
       //search for the nearest one.
-      if(MathAbs(OrderOpenPrice()-Bid)<(stopLoss/2)){
+      if(MathAbs(OrderOpenPrice()-Bid)<((stopLoss/2)-(5*Point))){
          if(order_a==-1){
             order_a = OrderType();
             order_price_a = OrderOpenPrice();
@@ -128,3 +128,31 @@ void setOrder(double price){
  
    }
    
+ void closeAfterWalkXtips(double tips){
+   int i, itotal;
+   itotal = OrdersTotal();
+   for(i=0;i<itotal;i++){
+      OrderSelect(i, SELECT_BY_POS, MODE_TRADES);
+       // check for opened position, symbol & MagicNumber
+       if (OrderSymbol()== currency && OrderMagicNumber()==magicNumber){
+         if((OrderProfit()/(OrderLots()*100)) >= (tips/10)){
+            OrderClose(OrderTicket(),OrderLots(),OrderClosePrice(),10);
+            closeRestOfOrders();
+            continue;
+            }
+    
+         }
+       }  
+ 
+   }
+   
+void closeRestOfOrders(){
+   int i;
+   i = OrdersTotal()-1;
+   while(i>=0){
+      OrderSelect(i, SELECT_BY_POS, MODE_TRADES);
+      if (OrderSymbol()== currency && OrderMagicNumber()==magicNumber)
+          OrderClose(OrderTicket(),OrderLots(),OrderClosePrice(),10);
+      }
+      i--;
+   }
