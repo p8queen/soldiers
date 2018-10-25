@@ -13,22 +13,25 @@
 
 //currency = "USDJPY";
 string currency = Symbol();
-double topPrice = 111.85;
-double downPrice = 109.85;
-double dblPrice;
-int magicNumber = 1710;
+double topPrice,downPrice,dblPrice;
+int magicNumber = 1810;
 double stopLoss = 500*Point;
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
 int OnInit()
   {
-   dblPrice = topPrice;
-   while(dblPrice>=downPrice){
-      setOrder(dblPrice);
-      dblPrice -= 0.5;
-      
-      }
+   dblPrice = Ask;
+   OrderSend(currency,OP_BUY,0.01,Ask,10,dblPrice-stopLoss,0,NULL,magicNumber);
+   OrderSend(currency,OP_SELL,0.01,Bid,10,dblPrice+stopLoss,0,NULL,magicNumber);
+   
+   topPrice = dblPrice + 4*stopLoss;
+   downPrice = dblPrice + stopLoss;
+   setInitialOrdes(topPrice,downPrice);
+   
+   topPrice = dblPrice - stopLoss;
+   downPrice = dblPrice - 4*stopLoss;
+   setInitialOrdes(topPrice,downPrice);
 
   return(INIT_SUCCEEDED);
   }
@@ -54,6 +57,17 @@ void OnTick(){
 /////////////////
 //****************
 //////////////////
+
+void setInitialOrdes(double highPrice, double lowPrice){
+   dblPrice = highPrice;
+   while(dblPrice>=lowPrice){
+      setOrder(dblPrice);
+      dblPrice -= 0.5;
+      
+      }
+   
+
+   }
 
 void setOrder(double price){
    int op;
