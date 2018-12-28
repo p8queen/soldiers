@@ -49,8 +49,8 @@ void OnDeinit(const int reason)
 void OnTick(){
 
    setPendingOrder();
-   Sleep(500);
-   closeAfterWalkXtips(150);   
+   //Sleep(500);
+   closeAfterWalkXtips(100);   
 }  
 
 
